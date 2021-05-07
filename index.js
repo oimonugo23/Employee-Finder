@@ -12,10 +12,16 @@ async function startPrompt() {
 
   if (answer.banana === "view departments") {
     viewDepartments();
-  } else {
-  }
+  } else if (answer.banana === "view employees") {
+    viewEmployees();
+    }
 }
 async function viewDepartments() {
   const departments = await db.searchForDept();
   console.log("FRONT END", departments);
+}
+
+async function viewEmployees() {
+  const departments = await db.searchForDept();
+  console.log("FRONT END", employees);
 }
