@@ -17,25 +17,42 @@ class DB {
       console.log(error);
     }
   }
-}
+
 
 async searchForEmployee() {
   const query = this.query;
   try {
-    const result = await query("SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager
-FROM employee e
-LEFT JOIN employee AS m 
-ON m.id = e.manager_id
-LEFT JOIN role r 
-ON e.role_id = r.id
-LEFT JOIN department d 
-ON r.department_id = d.id"
-);
+    const result = await query("SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager FROM employee e LEFT JOIN employee AS m ON m.id = e.manager_id LEFT JOIN role r ON e.role_id = r.id LEFT JOIN department d ON r.department_id = d.id");
     //return result;
     console.table(result);
   } catch (error) {
     console.log(error);
   }
 }
+
+  async searchForRole() {
+    const query = this.query;
+    try {
+      const result = await query("SELECT d.id, r.title, d.name AS Department, r.salary FROM role r LEFT JOIN department d ON r.department_id = d.id;");
+      //return result;
+      console.table(result);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  async searchForEmployeeByManager() {
+    const query = this.query;
+    try {
+      const result = await query("SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager FROM employee e LEFT JOIN employee AS m ON m.id = e.manager_id LEFT JOIN role r ON e.role_id = r.id LEFT JOIN department d ON r.department_id = d.id GROUP BY manager, e.id, e.first_name, e.last_name, r.title, department, r.salary");
+      
+      //return result;
+      console.table(result);
+    } catch (error) {
+       console.log(error);
+    }
+  }
 }
+
 module.exports = new DB(connection);
